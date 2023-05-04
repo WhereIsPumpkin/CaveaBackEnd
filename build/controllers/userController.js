@@ -6,8 +6,29 @@ Object.defineProperty(exports, "__esModule", {
 exports.getItems = exports.deleteItem = exports.addItem = void 0;
 var _Item = require("../models/Item");
 const getItems = async (req, res) => {
-  const items = await _Item.Item.findAll();
-  res.json(items);
+  const {
+    location,
+    sortBy
+  } = req.query;
+  let order;
+  if (sortBy === 'price') {
+    order = [['price', 'ASC']];
+  } else {
+    order = [['name', 'ASC']];
+  }
+  try {
+    const items = await _Item.Item.findAll({
+      where: location ? {
+        location
+      } : {},
+      order
+    });
+    res.json(items);
+  } catch (error) {
+    res.status(400).json({
+      error: error.message
+    });
+  }
 };
 exports.getItems = getItems;
 const addItem = async (req, res) => {
@@ -51,4 +72,6 @@ const deleteItem = async (req, res) => {
     });
   }
 };
+
+//Add item location filter and sorting to getItems function
 exports.deleteItem = deleteItem;

@@ -1,6 +1,5 @@
 import express from "express";
 import { sequelize } from './database/postgre';
-import { Item } from './models/Item';
 import { getItems, addItem, deleteItem } from './controllers/userController';
 
 const server = express();

@@ -3,8 +3,24 @@ import { Item } from '../models/Item';
 
 
 export const getItems = async (req: Request, res: Response) => {
-    const items = await Item.findAll();
+  const { location, sortBy } = req.query;
+  let order: [string, string][];
+
+  if (sortBy === 'price') {
+    order = [['price', 'ASC']];
+  } else {
+    order = [['name', 'ASC']];
+  }
+
+  try {
+    const items = await Item.findAll({
+      where: location ? { location } : {},
+      order,
+    });
     res.json(items);
+  } catch (error) {
+    res.status(400).json({ error: (error as Error).message });
+  }
 };
 
 export const addItem = async (req: Request, res: Response) => {
@@ -34,3 +50,5 @@ export const addItem = async (req: Request, res: Response) => {
       res.status(400).json({ error: (error as Error).message });
     }
   };
+
+  //Add item location filter and sorting to getItems function
