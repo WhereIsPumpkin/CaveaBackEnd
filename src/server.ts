@@ -1,10 +1,17 @@
 import express from "express";
-import { createUser, getUsers } from './controllers/userController';
-
+import { sequelize } from './database/postgre';
+import { Item } from './models/Item';
+import { getItems, addItem, deleteItem } from './controllers/userController';
 
 const server = express();
 
-server.get("/", createUser);
-server.get("/users", getUsers);
+// Sync the database
+sequelize.sync();
+
+server.use(express.json());
+
+server.get("/inventories", getItems);
+server.post("/inventories", addItem);
+server.delete("/inventories/:id", deleteItem);
 
 server.listen(4444, () => console.log("Server is listening at http://localhost:4444"));
