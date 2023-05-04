@@ -3,9 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getItems = exports.deleteItem = exports.addItem = void 0;
-var _Item = require("../models/Item");
-const getItems = async (req, res) => {
+exports.getInventories = exports.deleteInventory = exports.addInventory = void 0;
+var _Inventory = require("../models/Inventory");
+const getInventories = async (req, res) => {
   const {
     location,
     sortBy
@@ -17,54 +17,54 @@ const getItems = async (req, res) => {
     order = [['name', 'ASC']];
   }
   try {
-    const items = await _Item.Item.findAll({
+    const inventories = await _Inventory.Inventory.findAll({
       where: location ? {
         location
       } : {},
       order
     });
-    res.json(items);
+    res.json(inventories);
   } catch (error) {
     res.status(400).json({
       error: error.message
     });
   }
 };
-exports.getItems = getItems;
-const addItem = async (req, res) => {
+exports.getInventories = getInventories;
+const addInventory = async (req, res) => {
   const {
     name,
     location,
     price
   } = req.body;
   try {
-    const newItem = await _Item.Item.create({
+    const newInventory = await _Inventory.Inventory.create({
       name,
       location,
       price
     });
-    res.json(newItem);
+    res.json(newInventory);
   } catch (error) {
     res.status(400).json({
       error: error.message
     });
   }
 };
-exports.addItem = addItem;
-const deleteItem = async (req, res) => {
+exports.addInventory = addInventory;
+const deleteInventory = async (req, res) => {
   const {
     id
   } = req.params;
   try {
-    const item = await _Item.Item.findByPk(id);
-    if (!item) {
+    const inventory = await _Inventory.Inventory.findByPk(id);
+    if (!inventory) {
       return res.status(404).json({
-        error: 'Item not found'
+        error: 'Inventory not found'
       });
     }
-    await item.destroy();
+    await inventory.destroy();
     res.json({
-      message: 'Item deleted'
+      message: 'Inventory deleted'
     });
   } catch (error) {
     res.status(400).json({
@@ -72,6 +72,4 @@ const deleteItem = async (req, res) => {
     });
   }
 };
-
-//Add item location filter and sorting to getItems function
-exports.deleteItem = deleteItem;
+exports.deleteInventory = deleteInventory;
