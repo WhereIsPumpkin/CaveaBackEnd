@@ -8,7 +8,9 @@ var _Inventory = require("../models/Inventory");
 const getInventories = async (req, res) => {
   const {
     location,
-    sortBy
+    sortBy,
+    page = 1,
+    pageSize = 20
   } = req.query;
   let order;
   if (sortBy === 'price') {
@@ -21,9 +23,19 @@ const getInventories = async (req, res) => {
       where: location ? {
         location
       } : {},
-      order
+      order,
+      limit: Number(pageSize),
+      offset: (Number(page) - 1) * Number(pageSize)
     });
-    res.json(inventories);
+    const totalItems = await _Inventory.Inventory.count({
+      where: location ? {
+        location
+      } : {}
+    });
+    res.json({
+      inventories,
+      totalItems
+    });
   } catch (error) {
     res.status(400).json({
       error: error.message

@@ -3,8 +3,10 @@
 var _express = _interopRequireDefault(require("express"));
 var _postgre = require("./database/postgre");
 var _userController = require("./controllers/userController");
+var _cors = _interopRequireDefault(require("cors"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 const server = (0, _express.default)();
+server.use((0, _cors.default)());
 _postgre.sequelize.sync();
 server.use(_express.default.json());
 server.get("/inventories", _userController.getInventories);

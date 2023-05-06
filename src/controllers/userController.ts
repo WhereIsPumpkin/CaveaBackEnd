@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Inventory } from '../models/Inventory';
 
 export const getInventories = async (req: Request, res: Response) => {
-  const { location, sortBy } = req.query;
+  const { location, sortBy, page = 1, pageSize = 20 } = req.query;
   let order: [string, string][];
 
   if (sortBy === 'price') {
@@ -15,8 +15,13 @@ export const getInventories = async (req: Request, res: Response) => {
     const inventories = await Inventory.findAll({
       where: location ? { location } : {},
       order,
+      limit: Number(pageSize),
+      offset: (Number(page) - 1) * Number(pageSize),
     });
-    res.json(inventories);
+    const totalItems = await Inventory.count({
+      where: location ? { location } : {},
+    });
+    res.json({ inventories, totalItems });
   } catch (error) {
     res.status(400).json({ error: (error as Error).message });
   }

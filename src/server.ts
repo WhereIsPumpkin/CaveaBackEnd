@@ -2,9 +2,8 @@ import express from "express";
 import { sequelize } from './database/postgre';
 import { getInventories, addInventory, deleteInventory } from './controllers/userController';
 import cors from 'cors';
-
-
 const server = express();
+
 server.use(cors())
 
 sequelize.sync();

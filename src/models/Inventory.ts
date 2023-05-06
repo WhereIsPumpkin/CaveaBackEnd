@@ -15,3 +15,4 @@ export const Inventory = sequelize.define('Item', {
     allowNull: false
   }
 });
+
