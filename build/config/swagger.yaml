@@ -1,0 +1,70 @@
+openapi: 3.0.0
+info:
+  title: Inventory Management 🗃️
+  description: inventory management system
+  version: 1.0.0
+
+servers:
+  - url: https://inventorybackend-qmyj.onrender.com
+    description: production server
+  - url: http://localhost:4444/
+    description: local server
+
+paths:
+  /inventories:
+    get:
+      tags:
+        - Inventories
+      responses:
+        "200":
+          description: Successfully fetched
+    post:
+      tags:
+        - Inventories
+      summary: Add a new inventory item
+      description: Adds a new inventory item to the database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the inventory item
+                location:
+                  type: string
+                  description: The location of the inventory item
+                price:
+                  type: number
+                  description: The price of the inventory item
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: The ID of the newly created inventory item
+
+  /inventories/{id}:
+    delete:
+      tags:
+        - Inventories
+      summary: Delete an inventory item
+      description: Deletes an inventory item from the database by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: The ID of the inventory item to delete
+      responses:
+        "204":
+          description: No Content
