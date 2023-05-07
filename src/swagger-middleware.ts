@@ -3,7 +3,7 @@ import YAML from "yamljs";
 
 const options = {
   customCss: ".swagger-ui .topbar { display: none }",
-  customSiteTitle: "Projects",
+  customSiteTitle: "Inventory Management",
 };
 
 const swaggerDocument = YAML.load("./src/config/swagger.yaml");
